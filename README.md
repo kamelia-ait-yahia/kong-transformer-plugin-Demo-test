@@ -23,17 +23,15 @@ chmod +x start.sh
 ## 2. Build Custom Kong Image with the soap request transformer Plugin
 Create a custom Kong image with  soap-request-transformer plugin.
 
-kong-transformer-plugin-Demo-test/
-
-      ├── Dockerfile
+kong-transformer-plugin-Demo-test/Dockerfile
+      
 ```bash
 docker build -t custom-kong:3.0 .
 
 ```
 ## 3. Start Kong Using a Docker Container
 Start Kong using a Docker container.
-kong-transformer-plugin-Demo-test/
-      ├── docker-compose.yml
+kong-transformer-plugin-Demo-test/docker-compose.yml
 ```bash
 docker compose up -d
 ```
