@@ -56,7 +56,7 @@ curl -i -X POST http://localhost:8001/services/{service-id}/plugins \
 
 Testing with Postman: Use the postman collection **kong-transformer.postman_collection.json** provided to  test.
 
-Use curl to test sending SOAP requests:
+Use curl to test sending JSON requests:
 
 ```bash
 
