@@ -1,0 +1,38 @@
+{
+	"info": {
+		"_postman_id": "a6948b45-d667-4d93-b338-3b6e9865c6b0",
+		"name": "kong-transformer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32969136"
+	},
+	"item": [
+		{
+			"name": "request-example",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"body\": {\r\n        \"RxScriptDetail\": {\r\n            \"rxScriptDetailReq\": {\r\n                \"rxscdiDos\": \"66559f7f9846ec79fe26fdea|APIMAltares2024!\",\r\n                \"rxscdiLocn\": \"Test\",\r\n                \"rxscdiRxNbr\": \"572014199\"\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/soap",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"soap"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
