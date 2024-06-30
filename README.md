@@ -6,29 +6,41 @@ The objective is to call Kong using a REST request (JSON) and receive the respon
 This project involves creating a Flask application to serve as a SOAP service, Dockerizing the Flask application, setting up Kong with the kong kong soap request transformer plugin, and defining Kong services and routes to interact with the SOAP service.
 
 ## Table of Contents
-1. Create a Flask Application
-2. Dockerize the Flask Application
-3. Create a Custom Kong Image with the soap request transformer Plugin
-4. Start Kong Using a Docker Container
-5. Create Kong Service and Routes for our SOAP Service
-6. Add the Plugin to the Service
-7. Testing
+1. Run the Flask Application
+2. Build Custom Kong Image with the soap request transformer Plugin
+3. Start soap-service and Kong Using a Docker Container
+4. Create Kong Service and Routes for our SOAP Service
+5. Add the Plugin to the Service
+6. Testing
     - Testing with curl
     - Testing with Postman
 
-## 1. Create a Flask Application
+## 1. Run the Flask Application
 Develop a Flask application that acts as our SOAP service. This service listens for SOAP requests and sends predefined XML SOAP responses.
+```bash
+cd soap-service
+chmod +x start.sh
+./start.sh
+```
 
-## 2. Dockerize the Flask Application
-Create a Dockerfile for the Flask application and build the Docker image.
+## 2. Build Custom Kong Image with the soap request transformer Plugin
+Create a custom Kong image with  soap-request-transformer plugin.
 
-## 3. Create a Custom Kong Image with Soap request transformer Plugin
-Create a custom Kong image with your plugin.
+kong-transformer-plugin-Demo-test/
+      ├── Dockerfile
+```bash
+docker build -t custom-kong:3.0 .
 
-## 4. Start Kong Using a Docker Container
+```
+## 3. Start Kong Using a Docker Container
 Start Kong using a Docker container.
+kong-transformer-plugin-Demo-test/
+      ├── docker-compose.yml
+```bash
+docker compose up -d
+```
 
-## 5. Create Kong Service and Routes for our SOAP Service
+## 4. Create Kong Service and Routes for our SOAP Service
 Define the service in Kong that points to your SOAP service. Use the following commands:
 
 ```bash
@@ -36,11 +48,12 @@ curl -i -X POST http://localhost:8001/services/ \
   --data name=soap-service \
   --data url=http://soap.service.com:5000/soap
 ```
+
 ```bash
 curl -i -X POST http://localhost:8001/services/soap-service/routes \
   --data paths[]=/soap-service
 ```
-##6.Add the soap request transformer Plugin to the Service
+## 5.Add the soap request transformer Plugin to the Service
 
 Add the plugin to the Kong service
 
