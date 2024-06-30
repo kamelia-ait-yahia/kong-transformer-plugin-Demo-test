@@ -24,6 +24,7 @@ chmod +x start.sh
 Create a custom Kong image with  soap-request-transformer plugin.
 
 kong-transformer-plugin-Demo-test/
+
       ├── Dockerfile
 ```bash
 docker build -t custom-kong:3.0 .
