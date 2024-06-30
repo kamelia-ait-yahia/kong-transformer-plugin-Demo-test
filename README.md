@@ -12,7 +12,7 @@ The objective is to call Kong using a REST request (JSON) and receive the respon
     - Testing with curl
     - Testing with Postman
 
-## 1. Run the Flask Application
+## 1. Build the Flask Application
 Develop a Flask application that acts as our SOAP service. This service listens for SOAP requests and sends predefined XML SOAP responses.
 ```bash
 cd soap-service
