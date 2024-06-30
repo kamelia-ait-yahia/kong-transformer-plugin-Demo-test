@@ -2,9 +2,6 @@
 
 The objective is to call Kong using a REST request (JSON) and receive the response in JSON format.
 
-## Project Overview
-This project involves creating a Flask application to serve as a SOAP service, Dockerizing the Flask application, setting up Kong with the kong kong soap request transformer plugin, and defining Kong services and routes to interact with the SOAP service.
-
 ## Table of Contents
 1. Run the Flask Application
 2. Build Custom Kong Image with the soap request transformer Plugin
