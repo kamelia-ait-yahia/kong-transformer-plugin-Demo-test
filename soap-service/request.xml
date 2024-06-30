@@ -1,0 +1,12 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://serviceobject.service.callisto.newsys.altares.fr" xmlns:xsd="http://request.callisto.newsys.altares.fr/xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:getIdentiteAltaN4Etablissement>
+         <ser:request>
+            <xsd:identification>66559f7f9846ec79fe26fdea|APIMAltares2024!</xsd:identification>
+            <xsd:refClient>Test</xsd:refClient>
+            <xsd:sirenSiret>572014199</xsd:sirenSiret>
+         </ser:request>
+      </ser:getIdentiteAltaN4Etablissement>
+   </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,23 @@
+package = "kong-plugin-soap-request-transformer"
+version = "0.1.0-0"
+source = {
+   url = "git://github.com/kong/kong-plugin-soap-request-transformer",
+   tag = "0.1.0"
+}
+description = {
+   summary = "This plugin transforms JSON requests to SOAP.",
+   homepage = "https://github.com/kong/kong-plugin-soap-request-transformer",
+}
+dependencies = {
+   "xml2lua = 1.4-3",
+   "luaexpat >= 1.1.0-3",
+}
+build = {
+   type = "builtin",
+   modules = {
+      ["kong.plugins.soap-request-transformer.handler"] = "kong/plugins/soap-request-transformer/handler.lua",
+      ["kong.plugins.soap-request-transformer.schema"] = "kong/plugins/soap-request-transformer/schema.lua",
+      ["kong.plugins.soap-request-transformer.access"] = "kong/plugins/soap-request-transformer/access.lua",
+      ["kong.plugins.soap-request-transformer.soap"] = "kong/plugins/soap-request-transformer/soap.lua",
+   }
+}
