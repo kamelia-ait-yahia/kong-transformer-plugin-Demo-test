@@ -2,7 +2,10 @@
 
 The objective is to call Kong using a REST request (JSON) and receive the response in JSON format.
 
-## Table of Contents
+## Demo video
+[Watch the video](https://drive.google.com/file/d/18iCC0cLuetUkA3YtLWTuPS5xaTZxnZJ2/view?usp=sharing)
+
+## Steps
 1. Run the Flask Application
 2. Build Custom Kong Image with the soap request transformer Plugin
 3. Start soap-service and Kong Using a Docker Container
@@ -78,8 +81,6 @@ curl -i -X POST \
   
 ```
 
-**Demo video**
-[Watch the video](https://drive.google.com/file/d/18iCC0cLuetUkA3YtLWTuPS5xaTZxnZJ2/view?usp=sharing)
 
 
 
