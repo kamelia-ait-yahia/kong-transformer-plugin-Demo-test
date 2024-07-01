@@ -2,20 +2,21 @@
 
 The objective is to call Kong using a REST request (JSON) and receive the response in JSON format.
 
-## Project Overview
-This project involves creating a Flask application to serve as a SOAP service, Dockerizing the Flask application, setting up Kong with the kong kong soap request transformer plugin, and defining Kong services and routes to interact with the SOAP service.
+## Demo video
+[Watch the video](https://drive.google.com/file/d/18iCC0cLuetUkA3YtLWTuPS5xaTZxnZJ2/view?usp=sharing)
 
-## Table of Contents
+## Steps
 1. Run the Flask Application
 2. Build Custom Kong Image with the soap request transformer Plugin
 3. Start soap-service and Kong Using a Docker Container
 4. Create Kong Service and Routes for our SOAP Service
 5. Add the Plugin to the Service
 6. Testing
-    - Testing with curl
-    - Testing with Postman
 
-## 1. Run the Flask Application
+    - Testing with Postman
+    - Testing with curl
+
+## 1. Build the Flask Application
 Develop a Flask application that acts as our SOAP service. This service listens for SOAP requests and sends predefined XML SOAP responses.
 ```bash
 cd soap-service
@@ -26,16 +27,17 @@ chmod +x start.sh
 ## 2. Build Custom Kong Image with the soap request transformer Plugin
 Create a custom Kong image with  soap-request-transformer plugin.
 
-kong-transformer-plugin-Demo-test/
-      ├── Dockerfile
+kong-transformer-plugin-Demo-test/Dockerfile
+      
 ```bash
 docker build -t custom-kong:3.0 .
 
 ```
 ## 3. Start Kong Using a Docker Container
 Start Kong using a Docker container.
-kong-transformer-plugin-Demo-test/
-      ├── docker-compose.yml
+
+## 4. Create Kong Service and Routes for our SOAP Service
+kong-transformer-plugin-Demo-test/docker-compose.yml
 ```bash
 docker compose up -d
 ```
@@ -69,7 +71,7 @@ curl -i -X POST http://localhost:8001/services/{service-id}/plugins \
 
 Testing with Postman: Use the postman collection **kong-transformer.postman_collection.json** provided to  test.
 
-Use curl to test sending SOAP requests:
+Use curl to test sending JSON requests:
 
 ```bash
 
@@ -79,6 +81,7 @@ curl -i -X POST \
   --data @request.json
   
 ```
+
 
 
 
