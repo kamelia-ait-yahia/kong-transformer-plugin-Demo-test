@@ -19,7 +19,7 @@ return {
                     {
                         namespace = {
                             type = "string",
-                            required = true,
+                            required = false,
                         },
                     },
                     {
@@ -44,6 +44,24 @@ return {
                             default = "soap",
                         },
                     },
+                    {
+                        service_name = {
+                            type = "string",
+                            required = true,
+                        },
+                    },
+                    -- {
+                    --     xmlns_ser = {
+                    --         type = "string",
+                    --         required = false,
+                    --     },
+                    -- },
+                    -- {
+                    --     xmlns_xsd = {
+                    --         type = "string",
+                    --         required = false,
+                    --     },
+                    -- },
                 },
             },
         },
