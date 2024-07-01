@@ -9,8 +9,9 @@ The objective is to call Kong using a REST request (JSON) and receive the respon
 4. Create Kong Service and Routes for our SOAP Service
 5. Add the Plugin to the Service
 6. Testing
-    - Testing with curl
+
     - Testing with Postman
+    - Testing with curl
 
 ## 1. Build the Flask Application
 Develop a Flask application that acts as our SOAP service. This service listens for SOAP requests and sends predefined XML SOAP responses.
