@@ -79,7 +79,7 @@ curl -i -X POST \
 ```
 
 **Demo video**
-[Watch the video]([https://drive.google.com/file/d/18iCC0cLuetUkA3YtLWTuPS5xaTZxnZJ2/view?usp=sharing])
+[Watch the video](https://drive.google.com/file/d/18iCC0cLuetUkA3YtLWTuPS5xaTZxnZJ2/view?usp=sharing)
 
 
 
