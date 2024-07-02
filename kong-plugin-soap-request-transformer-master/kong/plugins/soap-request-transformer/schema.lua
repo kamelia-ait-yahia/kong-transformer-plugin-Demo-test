@@ -13,7 +13,7 @@ return {
                     {
                         method = {
                             type = "string",
-                            required = true,
+                            required = false,
                         },
                     },
                     {

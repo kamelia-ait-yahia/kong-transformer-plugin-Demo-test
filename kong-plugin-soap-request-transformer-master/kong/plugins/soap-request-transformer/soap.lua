@@ -4,15 +4,13 @@
 -- See Copyright Notice in license.html
 ---------------------------------------------------------------------
 
-local assert, error, pairs, tonumber, tostring, type = assert, error, pairs, tonumber, tostring, type
+local assert, pairs, tonumber, tostring, type = assert, pairs, tonumber, tostring, type
 local table = require "table"
 local tconcat, tinsert, tremove = table.concat, table.insert, table.remove
 local string = require "string"
-local gsub, strfind, strformat = string.gsub, string.find, string.format
-local max = require "math".max
+local gsub, strformat = string.gsub, string.format
 local lom = require "lxp.lom"
 local parse = lom.parse
-
 
 local tescape = {
     ['&'] = '&amp;',
@@ -21,6 +19,7 @@ local tescape = {
     ['"'] = '&quot;',
     ["'"] = '&apos;',
 }
+
 ---------------------------------------------------------------------
 -- Escape special characters.
 ---------------------------------------------------------------------
@@ -35,11 +34,12 @@ local tunescape = {
     ['&quot;'] = '"',
     ['&apos;'] = "'",
 }
+
 ---------------------------------------------------------------------
 -- Unescape special characters.
 ---------------------------------------------------------------------
 local function unescape(text)
-    return (gsub(text, "(&%a+%;)", tunescape))
+    return (gsub(text, "(&%a+;)", tunescape))
 end
 
 local serialize
@@ -54,15 +54,8 @@ local function attrs(a)
         return "" -- no attributes
     else
         local c = {}
-        if a[1] then
-            for i = 1, #a do
-                local v = a[i]
-                c[i] = strformat("%s=%q", v, tostring(a[v]))
-            end
-        else
-            for i, v in pairs(a) do
-                c[#c + 1] = strformat("%s=%q", i, tostring(v))
-            end
+        for i, v in pairs(a) do
+            c[#c + 1] = strformat('%s="%s"', i, escape(tostring(v)))
         end
         if #c > 0 then
             return " " .. tconcat(c, " ")
@@ -99,25 +92,19 @@ serialize = function(obj)
     if tt == "string" then
         return escape(unescape(obj))
     elseif tt == "number" then
-        return obj
+        return tostring(obj)
     elseif tt == "table" then
         local t = obj.tag
         assert(t, "Invalid table format (no `tag' field)")
-        return strformat("<%s%s>%s</%s>", t, attrs(obj.attr), contents(obj), t)
+        local attr = attrs(obj.attr)
+        local content = contents(obj)
+        if content == "" then
+            return strformat("<%s%s />", t, attr) -- Balise auto-fermante
+        else
+            return strformat("<%s%s>%s</%s>", t, attr, content, t)
+        end
     else
         return ""
-    end
-end
-
----------------------------------------------------------------------
--- @param attr Table of object's attributes.
--- @return String with the value of the namespace ("xmlns") field.
----------------------------------------------------------------------
-local function find_xmlns(attr)
-    for a, v in pairs(attr) do
-        if strfind(a, "xmlns", 1, 1) then
-            return v
-        end
     end
 end
 
@@ -128,16 +115,30 @@ end
 local header_template = {
     tag = "soapenv:Header",
 }
+
 local function insert_header(obj, header)
-    -- removes old header
-    if obj[2] then
-        tremove(obj, 1)
+    -- Supprime l'ancien header s'il existe
+    for i = #obj, 1, -1 do
+        if obj[i].tag == "soapenv:Header" then
+            table.remove(obj, i)
+        end
     end
-    if header then
-        header_template[1] = header
-        tinsert(obj, 1, header_template)
+
+    -- Insère le nouveau header si celui-ci n'est pas vide
+    if header and next(header) ~= nil then
+        local header_template = {
+            tag = "soapenv:Header",
+            header,
+        }
+        table.insert(obj, 1, header_template)
+    else
+        -- Insère simplement la balise fermante si le header est vide
+        table.insert(obj, 1, {
+            tag = "soapenv:Header",
+        })
     end
 end
+
 
 
 local xmlns_soap = "http://schemas.xmlsoap.org/soap/envelope/"
@@ -157,16 +158,19 @@ local xmlns_xsd = "http://request.callisto.newsys.altares.fr/xsd"
 -- @return String with SOAP envelope element.
 ---------------------------------------------------------------------
 local function encode(args)
-    local tae = type(args.entries)
-    assert(tae == "table", "Invalid field entries: expected table but got " .. tae)
     local soap_prefix = "soapenv"
 
+    -- Build SOAP envelope with correct elements
     local envelope_template = {
         tag = soap_prefix .. ":Envelope",
         attr = {
-            ["xmlns:soapenv"] = xmlns_soap,
+            ["xmlns:" .. soap_prefix] = xmlns_soap,
             ["xmlns:ser"] = xmlns_ser,
             ["xmlns:xsd"] = xmlns_xsd,
+        },
+        {
+            tag = soap_prefix .. ":Header",
+            
         },
         {
             tag = soap_prefix .. ":Body",
@@ -176,27 +180,28 @@ local function encode(args)
                     tag = "ser:request",
                     {
                         tag = "xsd:identification",
-                        [1] = args.entries[1],
+                        args.entries["identification"],
                     },
                     {
                         tag = "xsd:refClient",
-                        [1] = args.entries[2],
+                        args.entries["refClient"],
                     },
                     {
                         tag = "xsd:sirenSiret",
-                        [1] = args.entries[3],
+                        args.entries["sirenSiret"],
                     },
                 },
             },
         },
     }
 
-    -- Cleans old header and insert a new one (if it exists).
+    -- Insert header if defined in args
     insert_header(envelope_template, args.header)
-    
+
     return serialize(envelope_template)
 end
 
+---------------------------------------------------------------------
 -- Iterates over the children of an object.
 -- It will ignore any text, so if you want all of the elements, use ipairs(obj).
 -- @param obj Table (LOM format) representing the XML object.
@@ -204,7 +209,7 @@ end
 --    or nil to match only structured children (single strings are skipped).
 -- @return Function to iterate over the children of the object
 --    which returns each matching child.
-
+---------------------------------------------------------------------
 local function list_children(obj, tag)
     local i = 0
     return function()
@@ -234,7 +239,7 @@ local function decode(doc)
     local lc = list_children(obj)
     local o = lc()
     local headers = {}
-    -- Store SOAP:Headers separatelly
+    -- Store SOAP:Headers separately
     while o and (o.tag == ns .. ":Header" or o.tag == "SOAP-ENV:Header") do
         headers[#headers + 1] = list_children(o)()
         o = lc()
@@ -258,7 +263,7 @@ end
 -- @export
 return {
     _COPYRIGHT = "Copyright (C) 2004-2020 Kepler Project",
-    _DESCRIPTION = "LuaSOAP provides a very simple API that convert Lua tables to and from XML documents",
+    _DESCRIPTION = "LuaSOAP provides a very simple API that converts Lua tables to and from XML documents",
     _VERSION = "LuaSOAP 4.0.2",
 
     decode = decode,

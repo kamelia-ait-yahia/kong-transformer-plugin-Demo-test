@@ -16,17 +16,35 @@ local function parse_json(body)
 end
 
 
+-- local function parse_entries(e, parent)
+--     if type(e) == "table" then
+--         for k, v in pairs(e) do
+--             -- local el = { ['tag'] = k }
+--             insert(parent, v)
+--             parse_entries(v, el)
+--         end
+--     else
+--         insert(parent, e)
+--     end
+-- end
+
 local function parse_entries(e, parent)
     if type(e) == "table" then
         for k, v in pairs(e) do
-            local el = { ['tag'] = k }
-            insert(parent, el)
-            parse_entries(v, el)
+            if type(v) == "table" then
+                parent[k] = {}
+                parse_entries(v, parent[k])
+            else
+                parent[k] = v
+            end
         end
     else
-        insert(parent, e)
+        -- In case e is not a table, handle it accordingly (if needed)
+        -- This could be an edge case based on your JSON structure
+        -- insert(parent, e)  -- Uncomment if it is necessary to handle non-table values
     end
 end
+
 
 local function transform_json_body_into_soap(conf, body)
     local parameters = parse_json(body)
@@ -39,7 +57,6 @@ local function transform_json_body_into_soap(conf, body)
     local root = {}
     parse_entries(body, root)
     encode_args.namespace = conf.namespace
-    encode_args.method = conf.method
     encode_args.entries = root
     encode_args.soap_prefix = conf.soap_prefix
     encode_args.soap_version = conf.soap_version
