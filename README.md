@@ -12,6 +12,7 @@ The objective is to call Kong using a REST request (JSON) and receive the respon
 4. Create Kong Service and Routes for our SOAP Service
 5. Add the Plugin to the Service
 6. Testing
+7. New Service ?
 
     - Testing with Postman
     - Testing with curl
@@ -60,12 +61,11 @@ curl -i -X POST http://localhost:8001/services/soap-service/routes \
 Add the plugin to the Kong service
 
 ```bash
-curl -i -X POST http://localhost:8001/services/{service-id}/plugins \
+curl -i -X POST http://localhost:8001/services/188cdbc2-09b3-4dc8-8873-263111bf3c4a/plugins \
     --data "name=soap-request-transformer" \
     --data "config.method=RxScriptDetail" \
-    --data "config.namespace=DefaultNamespace" \
-    --data "config.remove_attr_tags=false" \
-    --data "config.soap_prefix=soapenv"
+    --data "config.service_name=soap_service"\
+
 ```
 ## 6. Testing
 
@@ -81,6 +81,26 @@ curl -i -X POST \
   --data @request.json
   
 ```
+
+## 7. New Service ?
+
+In case of a new service, you don't have to worry. All you have to do is:
+
+Add a new elseif in the access.lua file within the transform_json_body_into_soap function for the new service. Assume the service name is: orders_service.
+
+```bash
+ if conf.service_name == "soap_service" then
+        local soap_doc = soap.encode(encode_args)
+        kong.log.debug("Transformed request: " .. soap_doc)
+        return true, soap_doc
+    elseif  conf.service_name == "orders_service" then
+        local soap_doc = soapOrders.encode(encode_args)  
+        kong.log.debug("Transformed request: " .. soap_doc)
+        return true, soap_doc  
+    end
+
+```
+Then create you custom soapOrders template.
 
 
 
