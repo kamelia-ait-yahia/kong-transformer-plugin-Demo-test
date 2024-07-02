@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"body\": {\r\n        \"RxScriptDetail\": {\r\n            \"rxScriptDetailReq\": {\r\n                \"rxscdiDos\": \"66559f7f9846ec79fe26fdea|APIMAltares2024!\",\r\n                \"rxscdiLocn\": \"Test\",\r\n                \"rxscdiRxNbr\": \"572014199\"\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+					"raw": "{\r\n    \"body\": {\r\n        \"RxScriptDetail\": {\r\n                \"identification\": \"66559f7f9846ec79fe26fdea|APIMAltares2024!\",\r\n                \"refClient\": \"Test\",\r\n                \"sirenSiret\": \"572014199\"\r\n        }\r\n    }\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
