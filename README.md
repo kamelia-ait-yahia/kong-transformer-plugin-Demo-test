@@ -3,7 +3,7 @@
 The objective is to call Kong using a REST request (JSON) and receive the response in JSON format.
 
 ## Demo video
-[Watch the video](https://drive.google.com/file/d/18iCC0cLuetUkA3YtLWTuPS5xaTZxnZJ2/view?usp=sharing)
+[Watch the video](https://drive.google.com/file/d/1DdkKA9wjZglGDXkvRbC2KTV_cZbFGmiG/view?usp=sharing)
 
 ## Steps
 1. Run the Flask Application
